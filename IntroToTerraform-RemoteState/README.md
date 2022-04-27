@@ -77,7 +77,7 @@ resource "azurerm_resource_group" "rg" {
 ```
 Now when we run a `terraform init` and then `terraform apply` we can see our resource group is created and the state file is saved in the Azure Storage Account:
 
-![storage](../Images/storage.png)
+![storage](./IntroToTerraform-RemoteState/Images/storage.png)
 
 
 Now that we've set up remote state with an Azure Storage account let's take a look at setting up a remote state in Terraform Cloud.
@@ -86,23 +86,23 @@ Now that we've set up remote state with an Azure Storage account let's take a lo
 
 Terraform Cloud is a hosted service that allows for Terraform users to store their state files remotely as well as collaborate on their Terraform code in a team setting. It is also free for small teams. If you don't have a Terraform Cloud account, go ahead and [set one up](http://app.terraform.io/). Once you sign up and verify your account, you will be prompted to create an organization:
 
-![organization](./Images/organization.png)
+![organization](/IntroToTerraform-RemoteState/Images/organization.png)
 
 Next, select the user profile in the upper right corner and choose **User Settings**:
 
-![token](./Images/usersettings.png)
+![token](/IntroToTerraform-RemoteState/Images/usersettings.png)
 
 Select **Tokens** on the left hand side to create a user token. Click the **Create an API token** button:
 
-![token](./Images/token.png)
+![token](/IntroToTerraform-RemoteState/Images/token.png)
 
 Now we will need to label our API token. In this example, since we are using the token to authenticate the backend to Terraform Cloud, we will name this API token "Terraform Backend". Select **Create API token** to obtain the key:
 
-![tokensecret](./Images/nametoken.png)
+![tokensecret](/IntroToTerraform-RemoteState/Images/nametoken.png)
 
 Copy the key. Best practices would be to store this key in an Azure Key Vault or a secret management system. We will not be able to look up the value of this token, HashiCorp does not save this part of the key in their system. Select **Done** once you have copied the key to use for later:
 
-![tokensecret](./Images/tokensecret.png)
+![tokensecret](/IntroToTerraform-RemoteState/Images/tokensecret.png)
 
 Now that we set up our Terraform Cloud environment and created an API token for authenticating the backend, we should have everything we need to store our state in Terraform Cloud. Let's take a look at what the backend configuration looks like in our Terraform configuration.
 
@@ -146,7 +146,7 @@ END
 ```
 When we run `cat` against the file, we can see that our token is now in the Terraform CLI file for authenticating to `app.terraform.io`. This tells Terraform to use the API token for that hostname:
 
-![cat](./Images/cat.png)
+![cat](/IntroToTerraform-RemoteState/Images/cat.png)
 
 >**Note:** Since the token is stored in plain text, it is best practice to secure the endpoint that is using the token. In a CI/CD pipeline, we would want to create a task to remove the .terraformrc file as a cleanup task. 
 
@@ -178,7 +178,7 @@ resource "azurerm_resource_group" "rg" {
 ```
 When we run `terraform init` we can see that the workspace is automatically created in Terraform Cloud by selecting the **Workspaces** menu:
 
-![workspaces](./Images/workspaces.png)
+![workspaces](/IntroToTerraform-RemoteState/Images/workspaces.png)
 
 At this moment, if we do a `terraform apply` on our current configuration. We would see the following error:
 
@@ -195,11 +195,11 @@ This is because Terraform Cloud doesn't just store remote state; it will also re
 
 To execute our Terraform code in the Azure Cloud Shell session, we need to change the setting on our newly created Terraform Cloud workspace to *local execution*. By default, all Terraform Cloud workspaces default to remote execution. To change this setting, navigate to the **Workspaces** menu and select the workspace to modify. In our case, its **terraformdemo**. On the right-hand side select **Settings** and choose **General**:
 
-![generalsettings](./Images/generalsettings.png)
+![generalsettings](/IntroToTerraform-RemoteState/Images/generalsettings.png)
 
 In **General Settings** under **Execution Mode** select **Local** and click the **Save settings** button:
 
-![localexecution](./Images/localexecution.png)
+![localexecution](/IntroToTerraform-RemoteState/Images/localexecution.png)
 
 When we return to Azure CloudShell and run our `terraform apply` on our configuration, it will execute in the local shell like normal. Now we can apply Terraform code in this workspace locally unless we change it back to remote. The change we just made to the Terraform Cloud workspace must be made for every new workspace created if the intent is just to use Terraform Cloud to store remote state. There is currently no way to configure this through the Terraform command line yet. This is a pain for automating as it requires manual intervention to change the execution mode settings each time. A trick that can be used to work around this awkward stage with Terraform Cloud is to create another directory called `init`:
 ```
@@ -280,15 +280,15 @@ ARM_TENANT_ID="24e2975c-af72-454e-8dc0-234F3S342"
 ```
 To set up these environment variables in Terraform Cloud, select the **terraformdemo** workspace and then select the **Variables** tab. Under **Environment Variables** choose **Add Variable**:
 
-![envariables](./Images/envariables.png)
+![envariables](/IntroToTerraform-RemoteState/Images/envariables.png)
 
 We will need to add each variable, its best practice to mark these as sensitive with the checkbox. Click **Save variable** to save it. Then add the rest of the required environment variables:
 
-![setvariables](./Images/setvariables.png)
+![setvariables](/IntroToTerraform-RemoteState/Images/setvariables.png)
 
 We should have four environment variables saved when complete:
 
-![completevariables](./Images/completevariables.png)
+![completevariables](/IntroToTerraform-RemoteState/Images/completevariables.png)
 
 Now we are ready to run our configuration in Terraform Cloud. In Azure Cloud Shell run `terraform apply` on the configuration that is using the Terraform Cloud remote state. We will see the following output with a link:
 
@@ -302,7 +302,7 @@ Waiting for the plan to start...
 ```
 If we navigate to the provided link, we will be able to see the current *run* of our configuration in Terraform Cloud. The run will display the plan output of our configuration. We can also either **Confirm & Apply** from within Terraform Cloud, or confirm from the Azure Cloud Shell session. The output in the Azure Cloud Session is streamed back to the local console, so we could either manage the `terraform apply` through either Terraform Cloud or Azure Cloud Shell:
 
-![runs](./Images/runs.png)
+![runs](/IntroToTerraform-RemoteState/Images/runs.png)
 
 Terraform Cloud shell has additional features like providing costs of resources during `terraform plan`. There is also a configuration governance feature called Sentinel, which is very powerful. However, a significant confining element of using the Terraform Cloud for runs is that there are networking constraints. If we were using Terraform provisioners that require access to some network components like SSH into a VM, it would not be possible to use Terraform runs since the Terraform code is executed in HashiCorp's own VM environment.
 

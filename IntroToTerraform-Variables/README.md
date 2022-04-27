@@ -376,8 +376,7 @@ output "pip" {
 
 Now that we have our directory created with the four configuration files, we will run our `terraform init` to initialize the directory and download our provider plugins. We will follow it up with a `terraform apply`. Notice that we are now prompted for the Administrator password variable. This because we followed best practices and left the local admin password value out of the `terraform.tfvars` file and never set a default value in the `variables.tf` file. Terraform will automatically prompt for variables that aren't defined and do not have a default value configured:
 
-![adminpassword](/Images/passvariable.png)
-
+![adminpassword](/IntroToTerraform-Variables/Images/passvariable.png)
 
 After typing in a password, confirm the apply to start deploying the infrastructure:
 ```

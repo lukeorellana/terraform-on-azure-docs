@@ -280,11 +280,11 @@ azurerm_virtual_machine.vm: Still creating... [2m30s elapsed]
 ```
 Once the Terraform deployment has finished, we can check in the Azure Portal and search for Automation Accounts. After selecting the Automation Account **aa-terraformdemo**, we can select **State Configuration (DSC)** on the left hand side and see our newly provisioned VM with the WebServer configuration assigned:
 
-![azuredsc](./Images/azuredsc.PNG)
+![azuredsc](/IntroToTerraform-Provisioners/Images/azuredsc.PNG)
 
 When we go to the assigned Public IP Address in a web browser, we can see that the IIS role is already installed:
 
-![iis](./Images/iis.PNG)
+![iis](terraform-on-azure-docs/IntroToTerraform-Provisioners/Images/iis.PNG)
 
 We've successfully created a Terraform configuration that deploys a VM and assigns a DSC configuration. But what happens when we destroy this VM? Provisioner blocks like the one we created are only deployed when the VM or resource is first created. If we changed the size of the VM or another attribute, the Provisioner block would not run again. If we ran a `terraform destroy` on this configuration right now, our VM would not be removed from Azure DSC. In the next section we will look at what we can do to fix this with a *destroy provisioner*.
 
@@ -455,7 +455,7 @@ azurerm_virtual_machine.vm: Still destroying... [id=/subscriptions/5c80ecff-4dfe
 ```
 Once the destroy process is complete, we will see that the VM is removed from Azure DSC. 
 
-![decom](./Images/decom.PNG)
+![decom](terraform-on-azure-docs/IntroToTerraform-Provisioners/Images/decom.PNG)
 
 Now we have a complete VM configuration automated from deployment to decommission. 
 
@@ -536,7 +536,7 @@ Terraform has been successfully initialized!
 ```
 After running `terraform apply` we can see that our two Azure Container Registries are created, and the hello world image is automatically imported to each of them:
 
-![acr](./Images/acr.PNG)
+![acr](terraform-on-azure-docs/IntroToTerraform-Provisioners/Images/acr.PNG)
 
 Now, what happens if we changed the location of these Azure Container Registries? The resources would be re-created, but the provisioner task would not run again because it only runs the first time we deploy our resources. When designing infrastructure with Terraform, we want to make our configurations as stable as possible for any scenario. To improve this configuration, we will use a `triggers` argument to declare that we want our provisioner to run again if any of our Azure Container Registries are modified. The code will look like the following:
 ```

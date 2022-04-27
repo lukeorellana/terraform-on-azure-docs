@@ -23,7 +23,7 @@ In a real-world Terraform environment, we wouldn't want to re-create the same co
 
 The diagram below demonstrates the strategy of splitting up the various Azure services by component modules. By creating four modules for each service in this environment, we can also re-use the same code in both Dev, QA, and Prod. This practice ensures accurate infrastructure comparisons between each environment throughout each stage of development. We are no longer copying and pasting our code from dev to QA to Prod. Instead, we parameterize our modules to allow us to customize slightly for each environment, such as resource names and networking subnets:
 
-![UsingModules](./Images/UsingModules.png)
+![UsingModules](/IntroToTerraform-Modules/Images/UsingModules.png)
 
 Creating a module for each cloud service also allows us to re-use modules in other projects as well. Our Terraform modules turn into building blocks that can be used over and over again to create infrastructure on demand.
 
