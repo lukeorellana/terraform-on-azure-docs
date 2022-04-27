@@ -14,12 +14,12 @@ Before you begin, you'll need an [Azure subscription](https://azure.microsoft.co
 
 We will be using the Azure Cloud Shell as Terraform already comes preinstalled in this environment and is the fastest way to get started. To launch Azure Cloud Shell, browse to [shell.azure.com](https://shell.azure.com). Select either **Bash** or **PowerShell**. This will bring up a Linux container environment with a command line interface to either tool you select. In this example we will use **Bash**:
 
-![csbash](/Images/csbash.png)
+![csbash](./Images/csbash.png)
 
 Next, choose the desired subscription to store our Cloud Shell resources in and select **Create Storage**. This will create a storage account in that subscription which will be used to store our user session data for CloudShell:
 
 
-![cssubscription](/Images/cssubscription.png)
+![cssubscription](./Images/cssubscription.png)
 
 Wait a few minutes for Azure to provision the storage account. Once completed, we will be redirected to our Azure Cloud Shell environment. To verify the subscription our Cloud Shell environment is using, we can type the following command:
 
@@ -49,7 +49,7 @@ Next, we will create a `main.tf` file to deploy a resource group to our Azure su
 
 This creates a file named `main.tf` and opens an integrated file editor that we can use to create our configuration file in Azure Cloud Shell. There are more efficient ways to develop Terraform configurations, like using Visual Studio Code with the Terraform extension. However, for the ease of this guide, we will use the integrated file editor in Azure Cloud Shell:
 
-![blankscode](/Images/blankvscode.png)
+![blankscode](./Images/blankvscode.png)
 
 In Terraform the syntax is simple. We declare the components we want to create by defining *blocks* and *arguments* in the following format:
 ```
